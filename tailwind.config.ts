@@ -57,6 +57,7 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "bbva-cyan": "hsl(var(--bbva-cyan))",
       },
       borderRadius: {
         lg: "var(--radius)",

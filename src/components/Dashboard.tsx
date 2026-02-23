@@ -1,0 +1,342 @@
+import { useState, useMemo } from 'react';
+import { Lock, X, Pencil, ChevronLeft, ChevronRight } from 'lucide-react';
+import oceanBg from '@/assets/ocean-bg.jpg';
+import BottomNav, { TopBar } from '@/components/BottomNav';
+import { generateTransactions, type Transaction } from '@/lib/transactions';
+import { format } from 'date-fns';
+
+interface DashboardProps {
+  onLogout: () => void;
+}
+
+const Dashboard = ({ onLogout }: DashboardProps) => {
+  const [view, setView] = useState<'home' | 'account'>('home');
+  const [tab, setTab] = useState<'featured' | 'products'>('featured');
+  const [showLoanBanner, setShowLoanBanner] = useState(true);
+  const [txnStartDate, setTxnStartDate] = useState(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    return d;
+  });
+  const [txnEndDate, setTxnEndDate] = useState(new Date());
+  const [txnCount, setTxnCount] = useState(20);
+  const [showConfig, setShowConfig] = useState(false);
+
+  const transactions = useMemo(
+    () => generateTransactions(txnStartDate, txnEndDate, txnCount),
+    [txnStartDate, txnEndDate, txnCount]
+  );
+
+  const balance = 12.17;
+
+  if (view === 'account') {
+    return (
+      <AccountDetail
+        balance={balance}
+        transactions={transactions}
+        onBack={() => setView('home')}
+        showConfig={showConfig}
+        setShowConfig={setShowConfig}
+        txnStartDate={txnStartDate}
+        setTxnStartDate={setTxnStartDate}
+        txnEndDate={txnEndDate}
+        setTxnEndDate={setTxnEndDate}
+        txnCount={txnCount}
+        setTxnCount={setTxnCount}
+      />
+    );
+  }
+
+  return (
+    <div className="min-h-screen max-w-md mx-auto bg-background pb-20">
+      {/* Hero section */}
+      <div className="relative">
+        <img src={oceanBg} alt="" className="w-full h-56 object-cover" />
+        <div className="absolute inset-0 flex flex-col">
+          <TopBar />
+          <div className="flex-1" />
+          <div className="mx-4 mb-4 bg-card/95 backdrop-blur-sm rounded-2xl p-5">
+            <div className="flex items-start justify-between">
+              <h2 className="text-2xl font-bold text-primary leading-tight">
+                You are already
+                <br />
+                in your app
+              </h2>
+              <div className="w-11 h-11 rounded-full bg-bbva-cyan flex items-center justify-center text-primary font-bold text-sm">
+                HU
+              </div>
+            </div>
+            <button
+              onClick={() => setView('account')}
+              className="w-full mt-4 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-base"
+            >
+              View all
+            </button>
+            <div className="flex items-start gap-2 mt-3 text-xs text-muted-foreground">
+              <Lock size={14} className="mt-0.5 shrink-0" />
+              <p>Alerta: BBVA nunca te solicitará por SMS que llames a un número de teléfono. Si recibes uno así, es falso.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Home content */}
+      <div className="px-4 pt-4">
+        {/* Tabs */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-primary">Home</h3>
+        </div>
+        <div className="flex gap-2 mb-5">
+          <button
+            onClick={() => setTab('featured')}
+            className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+              tab === 'featured'
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'bg-transparent text-primary border-primary'
+            }`}
+          >
+            Featured
+          </button>
+          <button
+            onClick={() => setTab('products')}
+            className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${
+              tab === 'products'
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'bg-transparent text-primary border-primary'
+            }`}
+          >
+            Your products
+          </button>
+        </div>
+
+        {tab === 'featured' && (
+          <>
+            {/* Loan banner */}
+            {showLoanBanner && (
+              <div className="bbva-gradient rounded-2xl p-5 mb-5 relative">
+                <button onClick={() => setShowLoanBanner(false)} className="absolute top-3 right-3 text-white/70">
+                  <X size={18} />
+                </button>
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-full bg-accent/30 flex items-center justify-center text-2xl">💰</div>
+                  <div className="flex-1">
+                    <h4 className="text-white font-bold">Do you need a loan?</h4>
+                    <p className="text-white/80 text-sm mt-1">Find out if it is available for you with the new fast and paperless process.</p>
+                    <button className="text-accent text-sm font-bold mt-2">See more</button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Quick payments */}
+            <div className="mb-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xl font-bold text-primary">Quick payments</h3>
+                <Pencil size={18} className="text-primary" />
+              </div>
+              <div className="bbva-card p-5">
+                <p className="text-sm text-muted-foreground mb-3">💸 Send money with Bizum</p>
+                <h4 className="text-2xl font-bold text-primary mb-2">Bizum</h4>
+                <p className="text-sm text-muted-foreground mb-4">Send or receive money to anyone you want, instantly and just by having their mobile number</p>
+                <button className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-bold">Activate</button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {tab === 'products' && (
+          <>
+            {/* Main products */}
+            <div className="mb-5">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xl font-bold text-primary">Main products</h3>
+                <Pencil size={18} className="text-primary" />
+              </div>
+              <div className="bbva-card p-5" onClick={() => setView('account')}>
+                <div className="flex items-center justify-between mb-1">
+                  <h4 className="text-xl font-bold text-primary">Account *67</h4>
+                  <span className="text-sm text-muted-foreground">•67</span>
+                </div>
+                <p className="text-3xl font-light text-foreground mt-2">{balance.toFixed(2)} €</p>
+                <p className="text-sm text-muted-foreground">Available balance</p>
+
+                <div className="mt-5 border-t border-border pt-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-base font-semibold text-foreground">Latest transactions</span>
+                    <button className="text-sm font-bold text-accent">See all</button>
+                  </div>
+                  {transactions.slice(0, 3).map((txn) => (
+                    <TransactionRow key={txn.id} txn={txn} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      <BottomNav active="home" />
+    </div>
+  );
+};
+
+const TransactionRow = ({ txn }: { txn: Transaction }) => (
+  <div className="flex items-center gap-3 py-2.5">
+    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
+      {txn.icon}
+    </div>
+    <div className="flex-1 min-w-0">
+      <p className="text-sm font-medium text-foreground truncate">{txn.description}</p>
+      <p className="text-xs text-muted-foreground">{format(txn.date, 'dd MMM yyyy')}</p>
+    </div>
+    <span className="text-sm font-semibold text-foreground whitespace-nowrap">{txn.amount.toFixed(2)} €</span>
+  </div>
+);
+
+interface AccountDetailProps {
+  balance: number;
+  transactions: Transaction[];
+  onBack: () => void;
+  showConfig: boolean;
+  setShowConfig: (v: boolean) => void;
+  txnStartDate: Date;
+  setTxnStartDate: (d: Date) => void;
+  txnEndDate: Date;
+  setTxnEndDate: (d: Date) => void;
+  txnCount: number;
+  setTxnCount: (n: number) => void;
+}
+
+const AccountDetail = ({
+  balance,
+  transactions,
+  onBack,
+  showConfig,
+  setShowConfig,
+  txnStartDate,
+  setTxnStartDate,
+  txnEndDate,
+  setTxnEndDate,
+  txnCount,
+  setTxnCount,
+}: AccountDetailProps) => {
+  const [page, setPage] = useState(1);
+  const totalPages = 5;
+
+  return (
+    <div className="min-h-screen max-w-md mx-auto bg-background pb-20">
+      <TopBar title="Account *67" showBack onBack={onBack} />
+
+      {/* Balance card */}
+      <div className="mx-4 bbva-card p-5 mb-4">
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="text-xl font-bold text-primary">Account *67</h3>
+          <span className="text-sm text-muted-foreground">•67</span>
+        </div>
+        <p className="text-3xl font-light text-foreground mt-2">{balance.toFixed(2)} €</p>
+        <p className="text-sm text-muted-foreground">Available balance</p>
+        <p className="text-3xl font-light text-foreground mt-4">{balance.toFixed(2)} €</p>
+        <p className="text-sm text-muted-foreground">Current balance</p>
+        <button className="text-accent text-sm font-bold mt-4">See details and IBAN</button>
+      </div>
+
+      {/* Pagination */}
+      <div className="mx-4 flex items-center justify-between mb-4">
+        <span className="text-sm text-accent font-medium">{page} of {totalPages}</span>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPage(Math.max(1, page - 1))}
+            className="w-10 h-10 rounded-full border border-primary flex items-center justify-center text-primary"
+          >
+            <ChevronLeft size={20} />
+          </button>
+          <button
+            onClick={() => setPage(Math.min(totalPages, page + 1))}
+            className="w-10 h-10 rounded-full border border-primary flex items-center justify-center text-primary"
+          >
+            <ChevronRight size={20} />
+          </button>
+        </div>
+      </div>
+
+      {/* Set money aside */}
+      <div className="mx-4 bbva-card p-5 mb-4">
+        <div className="flex items-center gap-3 mb-2">
+          <span className="text-xl">🎯</span>
+          <h4 className="font-bold text-foreground">Set money aside in your account</h4>
+        </div>
+        <p className="text-sm text-muted-foreground ml-9">If you don't see it, you don't spend it.</p>
+        <button className="text-primary font-bold text-sm mt-2 ml-9">More</button>
+      </div>
+
+      {/* Customer benefits */}
+      <div className="mx-4 bbva-card p-5 mb-4">
+        <div className="flex items-center gap-4">
+          <div className="text-3xl">➕</div>
+          <div>
+            <h4 className="font-bold text-accent">As a customer, you get much more</h4>
+            <p className="text-sm text-muted-foreground mt-1">Did you know you have exclusive benefits for being with BBVA? Discover them</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Transaction config */}
+      <div className="mx-4 mb-4">
+        <button
+          onClick={() => setShowConfig(!showConfig)}
+          className="w-full py-3 rounded-xl border border-primary text-primary font-bold text-sm"
+        >
+          {showConfig ? 'Hide' : '⚙️ Configure'} Transaction Generator
+        </button>
+      </div>
+
+      {showConfig && (
+        <div className="mx-4 bbva-card p-5 mb-4 space-y-4">
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-1">Start Date</label>
+            <input
+              type="date"
+              value={format(txnStartDate, 'yyyy-MM-dd')}
+              onChange={(e) => setTxnStartDate(new Date(e.target.value))}
+              className="w-full border border-input rounded-lg px-3 py-2 text-sm bg-transparent"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-1">End Date</label>
+            <input
+              type="date"
+              value={format(txnEndDate, 'yyyy-MM-dd')}
+              onChange={(e) => setTxnEndDate(new Date(e.target.value))}
+              className="w-full border border-input rounded-lg px-3 py-2 text-sm bg-transparent"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-foreground block mb-1">Number of Transactions: {txnCount}</label>
+            <input
+              type="range"
+              min={5}
+              max={50}
+              value={txnCount}
+              onChange={(e) => setTxnCount(Number(e.target.value))}
+              className="w-full accent-primary"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Transactions list */}
+      <div className="mx-4 mb-4">
+        <h3 className="text-lg font-bold text-primary mb-3">All Transactions</h3>
+        <div className="bbva-card p-4">
+          {transactions.map((txn) => (
+            <TransactionRow key={txn.id} txn={txn} />
+          ))}
+        </div>
+      </div>
+
+      <BottomNav active="home" />
+    </div>
+  );
+};
+
+export default Dashboard;
