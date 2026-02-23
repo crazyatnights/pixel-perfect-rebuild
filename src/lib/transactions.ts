@@ -1,3 +1,5 @@
+import { customTransactions, extraDescriptions } from './custom-transactions';
+
 export interface Transaction {
   id: string;
   description: string;
@@ -7,7 +9,7 @@ export interface Transaction {
   icon: string;
 }
 
-const descriptions: Record<Transaction['category'], string[]> = {
+const baseDescriptions: Record<Transaction['category'], string[]> = {
   shopping: ['Amazon', 'Zara', 'El Corte Inglés', 'MediaMarkt', 'IKEA'],
   food: ['Mercadona', 'Carrefour', 'Lidl', 'Uber Eats', 'Glovo'],
   transport: ['Renfe', 'Metro Madrid', 'Cabify', 'Repsol', 'BP Gasolinera'],
@@ -16,6 +18,21 @@ const descriptions: Record<Transaction['category'], string[]> = {
   transfer: ['Bizum - Juan', 'Bizum - María', 'Transfer to savings', 'BBVA plan estars...'],
   subscription: ['Gym membership', 'iCloud Storage', 'Google One', 'Debit viva agua s...'],
 };
+
+// Merge extra descriptions from custom-transactions into the pool
+const descriptions: Record<Transaction['category'], string[]> = { ...baseDescriptions };
+for (const [cat, extras] of Object.entries(extraDescriptions)) {
+  const key = cat as Transaction['category'];
+  const merged = new Set([...descriptions[key], ...extras]);
+  descriptions[key] = Array.from(merged);
+}
+
+// Also pull unique descriptions from customTransactions into the pool
+for (const txn of customTransactions) {
+  if (!descriptions[txn.category].includes(txn.description)) {
+    descriptions[txn.category].push(txn.description);
+  }
+}
 
 const categoryIcons: Record<Transaction['category'], string> = {
   shopping: '🛍️',
@@ -49,5 +66,10 @@ export function generateTransactions(startDate: Date, endDate: Date, count: numb
     });
   }
 
-  return transactions.sort((a, b) => b.date.getTime() - a.date.getTime());
+  // Merge custom transactions that fall within the date range
+  const filtered = customTransactions.filter(
+    (t) => t.date >= startDate && t.date <= endDate
+  );
+
+  return [...transactions, ...filtered].sort((a, b) => b.date.getTime() - a.date.getTime());
 }
