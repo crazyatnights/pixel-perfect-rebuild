@@ -87,61 +87,30 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         <div />
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2 px-4 mb-5">
-        <button
-          onClick={() => setTab('featured')}
-          className={`px-5 py-2.5 rounded-full text-sm font-semibold border transition-colors ${
-            tab === 'featured'
-              ? 'bg-primary text-primary-foreground border-primary'
-              : 'bg-transparent text-primary border-primary'
-          }`}
-        >
-          Featured
-        </button>
-        <button
-          onClick={() => setTab('products')}
-          className={`px-5 py-2.5 rounded-full text-sm font-semibold border transition-colors ${
-            tab === 'products'
-              ? 'bg-primary text-primary-foreground border-primary'
-              : 'bg-transparent text-primary border-primary'
-          }`}
-        >
-          Your products
-        </button>
+      <div className="px-4">
+        {/* Quick payments */}
+        <div className="mb-5">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xl font-bold text-primary">Quick payments</h3>
+            <Pencil size={18} className="text-primary" />
+          </div>
+          <p className="text-sm text-muted-foreground mb-2">💸 Send money with Bizum</p>
+          <div className="bbva-card p-5">
+            <h4 className="text-2xl font-bold text-primary mb-2">Bizum</h4>
+            <p className="text-sm text-muted-foreground mb-4">Send or receive money to anyone you want, instantly and just by having their mobile number</p>
+            <button className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-bold">Activate</button>
+          </div>
+        </div>
+
+        {/* Main products */}
+        <div className="mb-5">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xl font-bold text-primary">Main products</h3>
+            <Pencil size={18} className="text-primary" />
+          </div>
+          <AccountCard balance={balance} transactions={transactions} onTap={() => setView('account')} />
+        </div>
       </div>
-
-      {tab === 'featured' && (
-        <div className="px-4">
-
-          {/* Quick payments */}
-          <div className="mb-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xl font-bold text-primary">Quick payments</h3>
-              <Pencil size={18} className="text-primary" />
-            </div>
-            <p className="text-sm text-muted-foreground mb-2">💸 Send money with Bizum</p>
-            <div className="bbva-card p-5">
-              <h4 className="text-2xl font-bold text-primary mb-2">Bizum</h4>
-              <p className="text-sm text-muted-foreground mb-4">Send or receive money to anyone you want, instantly and just by having their mobile number</p>
-              <button className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-bold">Activate</button>
-            </div>
-          </div>
-
-        </div>
-      )}
-
-      {tab === 'products' && (
-        <div className="px-4">
-          <div className="mb-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xl font-bold text-primary">Main products</h3>
-              <Pencil size={18} className="text-primary" />
-            </div>
-            <AccountCard balance={balance} transactions={transactions} onTap={() => setView('account')} />
-          </div>
-        </div>
-      )}
 
       <BottomNav active="home" />
     </div>
