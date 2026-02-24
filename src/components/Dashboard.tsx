@@ -113,22 +113,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
       {tab === 'featured' && (
         <div className="px-4">
-          {/* Loan banner */}
-          {showLoanBanner && (
-            <div className="bbva-gradient rounded-2xl p-5 mb-5 relative">
-              <button onClick={() => setShowLoanBanner(false)} className="absolute top-3 right-3 text-primary-foreground/70">
-                <X size={18} />
-              </button>
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-accent/30 flex items-center justify-center text-2xl">💰</div>
-                <div className="flex-1">
-                  <h4 className="text-primary-foreground font-bold">Do you need a loan?</h4>
-                  <p className="text-primary-foreground/80 text-sm mt-1">Find out if it is available for you with the new fast and paperless process.</p>
-                  <button className="text-accent text-sm font-bold mt-2">See more</button>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* Quick payments */}
           <div className="mb-5">
