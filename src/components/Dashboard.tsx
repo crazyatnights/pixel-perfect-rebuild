@@ -81,14 +81,12 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
       </div>
 
       {/* Bottom content - 40% */}
-      <div className="flex flex-col" style={{ height: '40%' }}>
-        <div className="px-4 pt-3 pb-1 flex items-center justify-between">
-          <div />
-          <h3 className="text-lg font-bold text-primary">Home</h3>
-          <div />
-        </div>
+      <div className="flex flex-col rounded-t-3xl bg-background relative overflow-hidden" style={{ height: '40%' }}>
+        {/* Turquoise vertical lines on both sides */}
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-bbva-cyan rounded-tl-3xl" />
+        <div className="absolute right-0 top-0 bottom-0 w-1.5 bg-bbva-cyan rounded-tr-3xl" />
 
-        <div className="px-4 flex-1 overflow-y-auto pb-16">
+        <div className="px-4 pt-4 pb-16 flex-1">
           {/* Quick payments */}
           <div className="mb-5">
             <div className="flex items-center justify-between mb-3">
