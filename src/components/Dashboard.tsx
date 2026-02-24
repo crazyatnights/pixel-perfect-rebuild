@@ -102,14 +102,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </div>
         </div>
 
-        {/* Main products */}
-        <div className="mb-5">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xl font-bold text-primary">Main products</h3>
-            <Pencil size={18} className="text-primary" />
-          </div>
-          <AccountCard balance={balance} transactions={transactions} onTap={() => setView('account')} />
-        </div>
       </div>
 
       <BottomNav active="home" />
