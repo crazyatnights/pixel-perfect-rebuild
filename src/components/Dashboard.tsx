@@ -48,10 +48,10 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   }
 
   return (
-    <div className="min-h-screen max-w-md mx-auto bg-background pb-20">
-      {/* Hero section */}
-      <div className="relative">
-        <img src={oceanBg} alt="" className="w-full h-56 object-cover" />
+    <div className="h-screen max-w-md mx-auto bg-background flex flex-col overflow-hidden">
+      {/* Hero section - 60% */}
+      <div className="relative" style={{ height: '60%', minHeight: '60%' }}>
+        <img src={oceanBg} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 flex flex-col">
           <TopBar />
           <div className="flex-1" />
@@ -80,31 +80,32 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         </div>
       </div>
 
-      {/* Home top bar when scrolled */}
-      <div className="px-4 pt-3 pb-1 flex items-center justify-between">
-        <div />
-        <h3 className="text-lg font-bold text-primary">Home</h3>
-        <div />
-      </div>
+      {/* Bottom content - 40% */}
+      <div className="flex flex-col" style={{ height: '40%' }}>
+        <div className="px-4 pt-3 pb-1 flex items-center justify-between">
+          <div />
+          <h3 className="text-lg font-bold text-primary">Home</h3>
+          <div />
+        </div>
 
-      <div className="px-4">
-        {/* Quick payments */}
-        <div className="mb-5">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xl font-bold text-primary">Quick payments</h3>
-            <Pencil size={18} className="text-primary" />
-          </div>
-          <p className="text-sm text-muted-foreground mb-2">💸 Send money with Bizum</p>
-          <div className="bbva-card p-5">
-            <h4 className="text-2xl font-bold text-primary mb-2">Bizum</h4>
-            <p className="text-sm text-muted-foreground mb-4">Send or receive money to anyone you want, instantly and just by having their mobile number</p>
-            <button className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-bold">Activate</button>
+        <div className="px-4 flex-1 overflow-y-auto pb-16">
+          {/* Quick payments */}
+          <div className="mb-5">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-xl font-bold text-primary">Quick payments</h3>
+              <Pencil size={18} className="text-primary" />
+            </div>
+            <p className="text-sm text-muted-foreground mb-2">💸 Send money with Bizum</p>
+            <div className="bbva-card p-5">
+              <h4 className="text-2xl font-bold text-primary mb-2">Bizum</h4>
+              <p className="text-sm text-muted-foreground mb-4">Send or receive money to anyone you want, instantly and just by having their mobile number</p>
+              <button className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-bold">Activate</button>
+            </div>
           </div>
         </div>
 
+        <BottomNav active="home" />
       </div>
-
-      <BottomNav active="home" />
     </div>
   );
 };
