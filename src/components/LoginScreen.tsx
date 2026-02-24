@@ -51,7 +51,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
       </div>
 
       {/* Greeting card */}
-      <div className="relative z-10 mt-auto flex flex-col justify-end min-h-[calc(100vh-80px)]">
+      <div className="relative z-10 flex flex-col items-stretch justify-center flex-1 min-h-[calc(100vh-80px)]">
         <div className={`mx-4 mb-4 rounded-2xl p-6 transition-all ${showPasswordSheet ? 'bg-primary/40 backdrop-blur-sm' : 'bg-card/95 backdrop-blur-sm'}`}>
           <div className="flex items-start justify-between">
             <div>
