@@ -49,62 +49,71 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   }
 
   return (
-    <div className="h-screen max-w-md mx-auto bg-background flex flex-col overflow-hidden">
-      {/* Hero section - 60% */}
-      <div className="relative" style={{ height: '60%', minHeight: '60%' }}>
-        <img src={oceanBg} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 flex flex-col">
-          <TopBar />
-          <div className="flex-1" />
-          <div className="mx-4 mb-4 bg-card/95 backdrop-blur-sm rounded-2xl p-5">
-            <div className="flex items-start justify-between">
-              <h2 className="text-2xl font-bold text-primary leading-tight">
-                You are already
-                <br />
-                in your app
-              </h2>
-              <div className="w-11 h-11 rounded-full bg-bbva-cyan flex items-center justify-center text-primary font-bold text-sm">
-                HU
-              </div>
-            </div>
-            <button
-              onClick={() => setView('account')}
-              className="w-full mt-4 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-base"
-            >
-              View all
-            </button>
-            <div className="flex items-start gap-2 mt-3 text-xs text-muted-foreground">
-              <Lock size={14} className="mt-0.5 shrink-0" />
-              <p>Alerta: BBVA nunca te solicitará por SMS que llames a un número de teléfono. Si recibes uno así, es falso.</p>
-            </div>
-          </div>
+    <div className="min-h-screen max-w-md mx-auto bg-background flex flex-col pb-20">
+      <TopBar title="Home" />
+
+      {/* Tabs */}
+      <div className="px-4 mb-4">
+        <div className="flex gap-2">
+          <button
+            onClick={() => setTab('featured')}
+            className={`px-5 py-2 rounded-full text-sm font-bold transition-colors ${
+              tab === 'featured'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-card text-foreground border border-border'
+            }`}
+          >
+            Featured
+          </button>
+          <button
+            onClick={() => setTab('products')}
+            className={`px-5 py-2 rounded-full text-sm font-bold transition-colors ${
+              tab === 'products'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-card text-foreground border border-border'
+            }`}
+          >
+            Your products
+          </button>
         </div>
       </div>
 
-      {/* Bottom content - 40% */}
-      <div className="flex flex-col rounded-t-3xl bg-background relative overflow-hidden" style={{ height: '40%' }}>
-        {/* Turquoise vertical lines on both sides */}
-        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-bbva-cyan rounded-tl-3xl" />
-        <div className="absolute right-0 top-0 bottom-0 w-1.5 bg-bbva-cyan rounded-tr-3xl" />
-
-        <div className="px-4 pt-4 pb-16 flex-1">
-          {/* Quick payments */}
-          <div className="mb-5">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xl font-bold text-primary">Quick payments</h3>
-              <Pencil size={18} className="text-primary" />
+      {/* Loan banner */}
+      {showLoanBanner && (
+        <div className="mx-4 mb-6 rounded-2xl overflow-hidden bg-primary p-5 relative">
+          <button
+            onClick={() => setShowLoanBanner(false)}
+            className="absolute top-3 right-3 text-primary-foreground/70"
+          >
+            <X size={20} />
+          </button>
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-accent/30 flex items-center justify-center shrink-0">
+              <div className="w-10 h-10 rounded-full bg-accent" />
             </div>
-            <p className="text-sm text-muted-foreground mb-2">💸 Send money with Bizum</p>
-            <div className="bbva-card p-5">
-              <h4 className="text-2xl font-bold text-primary mb-2">Bizum</h4>
-              <p className="text-sm text-muted-foreground mb-4">Send or receive money to anyone you want, instantly and just by having their mobile number</p>
-              <button className="w-full py-3.5 rounded-xl bg-primary text-primary-foreground font-bold">Activate</button>
+            <div>
+              <h3 className="text-primary-foreground font-bold text-base">Do you need a loan?</h3>
+              <p className="text-primary-foreground/80 text-sm mt-1">
+                Find out if it is available for you with the new fast and paperless process.
+              </p>
+              <button className="text-accent font-bold text-sm mt-2">See more</button>
             </div>
           </div>
         </div>
+      )}
 
-        <BottomNav active="home" />
+      {/* Main products */}
+      <div className="px-4">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-foreground">Main products</h2>
+          <Pencil size={20} className="text-foreground" />
+        </div>
+
+        {/* Account card */}
+        <AccountCard balance={balance} transactions={transactions} onTap={() => setView('account')} />
       </div>
+
+      <BottomNav active="home" />
     </div>
   );
 };
