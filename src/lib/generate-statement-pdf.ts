@@ -3,209 +3,282 @@ import { format } from 'date-fns';
 import type { Transaction } from './transactions';
 
 // BBVA brand colors (RGB)
-const NAVY = [18, 32, 63] as const;    // primary
-const CYAN = [0, 191, 219] as const;   // accent teal
+const NAVY = [18, 32, 63] as const;
+const CYAN = [0, 191, 219] as const;
 const WHITE = [255, 255, 255] as const;
-const LIGHT_GRAY = [245, 245, 245] as const;
+const LIGHT_GRAY = [240, 240, 240] as const;
 const GRAY = [120, 130, 145] as const;
-const DARK = [30, 40, 60] as const;
+const DARK = [40, 40, 40] as const;
+const BLACK = [0, 0, 0] as const;
+const TABLE_BORDER = [200, 200, 200] as const;
 
-function drawHeader(doc: jsPDF, startDate: Date, endDate: Date) {
+function drawHeader(doc: jsPDF) {
   const w = doc.internal.pageSize.getWidth();
 
-  // Navy header bar
+  // Top navy bar
   doc.setFillColor(...NAVY);
-  doc.rect(0, 0, w, 42, 'F');
+  doc.rect(0, 0, w, 8, 'F');
 
-  // Cyan accent line under header
+  // Cyan accent line
   doc.setFillColor(...CYAN);
-  doc.rect(0, 42, w, 3, 'F');
+  doc.rect(0, 8, w, 1.5, 'F');
 
-  // BBVA logo text
-  doc.setTextColor(...WHITE);
-  doc.setFontSize(22);
-  doc.setFont('helvetica', 'bold');
-  doc.text('BBVA', 20, 28);
-
-  // Statement title
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Account Statement', w - 20, 20, { align: 'right' });
-  doc.setFontSize(9);
-  doc.text(
-    `${format(startDate, 'dd/MM/yyyy')} - ${format(endDate, 'dd/MM/yyyy')}`,
-    w - 20,
-    30,
-    { align: 'right' }
-  );
-}
-
-function drawAccountInfo(doc: jsPDF, balance: number, y: number): number {
-  const w = doc.internal.pageSize.getWidth();
-
-  // Light background box
-  doc.setFillColor(...LIGHT_GRAY);
-  doc.roundedRect(15, y, w - 30, 38, 4, 4, 'F');
-
-  // Cyan left accent
-  doc.setFillColor(...CYAN);
-  doc.rect(15, y, 3, 38, 'F');
-
-  doc.setTextColor(...NAVY);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Account *67', 25, y + 14);
-
-  doc.setTextColor(...GRAY);
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  doc.text('ES12 0182 **** **** **** 0067', 25, y + 23);
-
-  doc.setTextColor(...NAVY);
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.text(`${balance.toFixed(2)} €`, w - 25, y + 18, { align: 'right' });
-
-  doc.setTextColor(...GRAY);
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Available balance', w - 25, y + 27, { align: 'right' });
-
-  return y + 48;
-}
-
-function drawTableHeader(doc: jsPDF, y: number): number {
-  const w = doc.internal.pageSize.getWidth();
-
-  doc.setFillColor(...NAVY);
-  doc.rect(15, y, w - 30, 10, 'F');
-
-  doc.setTextColor(...WHITE);
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Date', 20, y + 7);
-  doc.text('Description', 60, y + 7);
-  doc.text('Category', 135, y + 7);
-  doc.text('Amount', w - 20, y + 7, { align: 'right' });
-
-  return y + 14;
-}
-
-function drawTransactionRow(
-  doc: jsPDF,
-  txn: Transaction,
-  y: number,
-  isEven: boolean
-): number {
-  const w = doc.internal.pageSize.getWidth();
-
-  if (isEven) {
-    doc.setFillColor(...LIGHT_GRAY);
-    doc.rect(15, y - 4, w - 30, 12, 'F');
-  }
-
+  // Account holder info (left)
   doc.setTextColor(...DARK);
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'normal');
-  doc.text(format(txn.date, 'dd/MM/yy'), 20, y + 3);
-
-  // Description (truncated)
-  const desc = txn.description.length > 30
-    ? txn.description.substring(0, 28) + '...'
-    : txn.description;
-  doc.text(desc, 60, y + 3);
-
-  // Category badge
-  doc.setFillColor(...CYAN);
-  const catText = txn.category.charAt(0).toUpperCase() + txn.category.slice(1);
-  const catWidth = doc.getTextWidth(catText) + 6;
-  doc.roundedRect(133, y - 3, catWidth, 9, 2, 2, 'F');
-  doc.setTextColor(...NAVY);
   doc.setFontSize(7);
-  doc.setFont('helvetica', 'bold');
-  doc.text(catText, 136, y + 3);
+  doc.setFont('helvetica', 'normal');
+  doc.text('BBVA ACCOUNT HOLDER', 15, 16);
+  doc.text('CUSTOMER@EMAIL.COM', 15, 20);
+  doc.text('MADRID - SPAIN', 15, 24);
 
-  // Amount
-  const isNeg = txn.amount < 0;
-  doc.setTextColor(isNeg ? 180 : 0, isNeg ? 40 : 140, isNeg ? 40 : 60);
-  doc.setFontSize(8);
+  // BBVA logo (right)
+  doc.setTextColor(...NAVY);
+  doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  doc.text(`${txn.amount.toFixed(2)} €`, w - 20, y + 3, { align: 'right' });
+  doc.text('BBVA', w - 15, 20, { align: 'right' });
+
+  doc.setTextColor(...CYAN);
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'italic');
+  doc.text('Creando Oportunidades', w - 15, 25, { align: 'right' });
+}
+
+function drawSectionTitle(doc: jsPDF, title: string, y: number): number {
+  const w = doc.internal.pageSize.getWidth();
+
+  // Cyan background bar for section title
+  doc.setFillColor(...NAVY);
+  doc.rect(15, y, w - 30, 8, 'F');
+
+  doc.setTextColor(...WHITE);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'bold');
+  doc.text(title, 18, y + 5.5);
 
   return y + 12;
+}
+
+function drawInfoRow(doc: jsPDF, label: string, value: string, x: number, y: number, labelWidth = 45) {
+  doc.setTextColor(...GRAY);
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'normal');
+  doc.text(label, x, y);
+
+  doc.setTextColor(...DARK);
+  doc.setFont('helvetica', 'bold');
+  doc.text(value, x + labelWidth, y);
+}
+
+function drawOfficeAndAccountInfo(doc: jsPDF, balance: number, startDate: Date, endDate: Date, y: number): number {
+  const w = doc.internal.pageSize.getWidth();
+
+  // Extracto de Cuenta main title
+  doc.setTextColor(...NAVY);
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Extracto de Cuenta', 15, y);
+  y += 8;
+
+  // Office info section
+  y = drawSectionTitle(doc, 'Información de la oficina', y);
+  drawInfoRow(doc, 'DIRECCIÓN:', 'C/ Gran Vía 1, Madrid', 18, y);
+  y += 5;
+  drawInfoRow(doc, 'TELÉFONO:', '00 34 912 345 678', 18, y);
+  y += 9;
+
+  // Account info section
+  y = drawSectionTitle(doc, 'Información de la cuenta', y);
+  const halfW = (w - 30) / 2;
+  drawInfoRow(doc, 'Número de cuenta:', 'ES12 0182 **** **** 0067', 18, y, 35);
+  drawInfoRow(doc, 'Fecha de corte:', format(endDate, 'dd-MM-yyyy'), 18 + halfW, y, 30);
+  y += 5;
+  drawInfoRow(doc, 'Saldo disponible:', `${balance.toFixed(2)} €`, 18, y, 35);
+  drawInfoRow(doc, 'Período:', `${format(startDate, 'dd/MM/yyyy')} - ${format(endDate, 'dd/MM/yyyy')}`, 18 + halfW, y, 30);
+  y += 9;
+
+  return y;
+}
+
+function drawMovementSummary(doc: jsPDF, transactions: Transaction[], balance: number, y: number): number {
+  const w = doc.internal.pageSize.getWidth();
+
+  y = drawSectionTitle(doc, 'Resumen de movimientos', y);
+
+  const credits = transactions.filter(t => t.amount > 0);
+  const debits = transactions.filter(t => t.amount < 0);
+  const totalCredits = credits.reduce((s, t) => s + t.amount, 0);
+  const totalDebits = debits.reduce((s, t) => s + Math.abs(t.amount), 0);
+  const prevBalance = balance - transactions.reduce((s, t) => s + t.amount, 0);
+
+  // Summary table
+  const tableX = 15;
+  const tableW = w - 30;
+  const colWidths = [tableW * 0.35, tableW * 0.08, tableW * 0.22, tableW * 0.13, tableW * 0.22];
+  const rowH = 7;
+
+  // Table header
+  doc.setFillColor(...LIGHT_GRAY);
+  doc.rect(tableX, y, tableW, rowH, 'F');
+  doc.setDrawColor(...TABLE_BORDER);
+  doc.setLineWidth(0.3);
+  doc.rect(tableX, y, tableW, rowH, 'S');
+
+  doc.setTextColor(...NAVY);
+  doc.setFontSize(6.5);
+  doc.setFont('helvetica', 'bold');
+  doc.text('', tableX + 2, y + 5);
+  doc.text('No.', tableX + colWidths[0] + 2, y + 5);
+  doc.text('Valor', tableX + colWidths[0] + colWidths[1] + 2, y + 5);
+  doc.text('', tableX + colWidths[0] + colWidths[1] + colWidths[2] + 2, y + 5);
+  doc.text('Valor', tableX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3] + 2, y + 5);
+  y += rowH;
+
+  // Rows
+  const summaryRows = [
+    ['SALDO CIERRE MES ANTERIOR', '', prevBalance.toFixed(2), '', ''],
+    ['+ ABONOS', String(credits.length), totalCredits.toFixed(2), '', ''],
+    ['- CARGOS', String(debits.length), totalDebits.toFixed(2), '', ''],
+    ['', '', '', 'SALDO FINAL', balance.toFixed(2)],
+  ];
+
+  for (let i = 0; i < summaryRows.length; i++) {
+    const row = summaryRows[i];
+    const ry = y;
+
+    if (i % 2 === 0) {
+      doc.setFillColor(250, 250, 250);
+      doc.rect(tableX, ry, tableW, rowH, 'F');
+    }
+    doc.setDrawColor(...TABLE_BORDER);
+    doc.rect(tableX, ry, tableW, rowH, 'S');
+
+    doc.setFontSize(6.5);
+    doc.setFont('helvetica', row[0].startsWith('+') || row[0].startsWith('-') ? 'normal' : 'bold');
+    doc.setTextColor(...DARK);
+    doc.text(row[0], tableX + 2, ry + 5);
+
+    doc.setFont('helvetica', 'normal');
+    doc.text(row[1], tableX + colWidths[0] + 2, ry + 5);
+    doc.text(row[2], tableX + colWidths[0] + colWidths[1] + 2, ry + 5);
+
+    if (row[3]) {
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...NAVY);
+      doc.text(row[3], tableX + colWidths[0] + colWidths[1] + colWidths[2] + 2, ry + 5);
+      doc.setFontSize(7);
+      doc.text(row[4], tableX + colWidths[0] + colWidths[1] + colWidths[2] + colWidths[3] + 2, ry + 5);
+    }
+
+    y += rowH;
+  }
+
+  return y + 6;
+}
+
+function drawTransactionTableHeader(doc: jsPDF, y: number): number {
+  const w = doc.internal.pageSize.getWidth();
+  const tableX = 15;
+  const tableW = w - 30;
+  const rowH = 8;
+
+  doc.setFillColor(...NAVY);
+  doc.rect(tableX, y, tableW, rowH, 'F');
+
+  doc.setTextColor(...WHITE);
+  doc.setFontSize(6.5);
+  doc.setFont('helvetica', 'bold');
+
+  doc.text('Movi-', tableX + 2, y + 5.5);
+  doc.text('Fecha', tableX + 18, y + 5.5);
+  doc.text('Concepto', tableX + 42, y + 5.5);
+  doc.text('Cargos', tableX + tableW - 55, y + 5.5);
+  doc.text('Abonos', tableX + tableW - 30, y + 5.5);
+  doc.text('Saldo', tableX + tableW - 8, y + 5.5, { align: 'right' });
+
+  return y + rowH;
+}
+
+function drawTransactionRow(doc: jsPDF, txn: Transaction, index: number, y: number, runningBalance: number): number {
+  const w = doc.internal.pageSize.getWidth();
+  const tableX = 15;
+  const tableW = w - 30;
+  const rowH = 6.5;
+
+  // Alternating background
+  if (index % 2 === 0) {
+    doc.setFillColor(248, 249, 252);
+    doc.rect(tableX, y, tableW, rowH, 'F');
+  }
+
+  // Row border
+  doc.setDrawColor(...TABLE_BORDER);
+  doc.setLineWidth(0.15);
+  doc.line(tableX, y + rowH, tableX + tableW, y + rowH);
+
+  doc.setTextColor(...DARK);
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'normal');
+
+  // Movement number
+  doc.text(String(10000 + index), tableX + 2, y + 4.5);
+
+  // Date
+  doc.text(format(txn.date, 'dd-MM-yyyy'), tableX + 18, y + 4.5);
+
+  // Description (truncated)
+  const desc = txn.description.length > 40 ? txn.description.substring(0, 38) + '...' : txn.description;
+  doc.text(desc, tableX + 42, y + 4.5);
+
+  // Cargos (debits) or Abonos (credits)
+  doc.setFont('helvetica', 'bold');
+  if (txn.amount < 0) {
+    doc.setTextColor(180, 40, 40);
+    doc.text(Math.abs(txn.amount).toFixed(2), tableX + tableW - 42, y + 4.5, { align: 'right' });
+  } else {
+    doc.setTextColor(0, 120, 60);
+    doc.text(txn.amount.toFixed(2), tableX + tableW - 18, y + 4.5, { align: 'right' });
+  }
+
+  // Running balance
+  doc.setTextColor(...NAVY);
+  doc.setFont('helvetica', 'normal');
+  doc.text(runningBalance.toFixed(2), tableX + tableW - 2, y + 4.5, { align: 'right' });
+
+  return y + rowH;
 }
 
 function drawFooter(doc: jsPDF) {
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
 
-  // Cyan line
-  doc.setFillColor(...CYAN);
-  doc.rect(0, h - 18, w, 2, 'F');
+  // Bottom navy bar
+  doc.setFillColor(...NAVY);
+  doc.rect(0, h - 14, w, 14, 'F');
 
-  // Footer text
-  doc.setTextColor(...GRAY);
-  doc.setFontSize(7);
+  // Cyan accent
+  doc.setFillColor(...CYAN);
+  doc.rect(0, h - 14, w, 1, 'F');
+
+  doc.setTextColor(...WHITE);
+  doc.setFontSize(5.5);
   doc.setFont('helvetica', 'normal');
   doc.text(
-    'BBVA, S.A. - This document is for informational purposes only.',
-    w / 2,
-    h - 10,
-    { align: 'center' }
+    'En cumplimiento de lo dispuesto en la Ley de Protección de Datos. Este documento es informativo.',
+    w / 2, h - 8, { align: 'center' }
   );
   doc.text(
-    `Generated on ${format(new Date(), 'dd/MM/yyyy HH:mm')}`,
-    w / 2,
-    h - 5,
-    { align: 'center' }
+    `BBVA, S.A. — Generado el ${format(new Date(), 'dd/MM/yyyy HH:mm')}`,
+    w / 2, h - 4, { align: 'center' }
   );
 }
 
-function drawSummary(doc: jsPDF, transactions: Transaction[], y: number): number {
+function drawPageNumber(doc: jsPDF, page: number, total: number) {
   const w = doc.internal.pageSize.getWidth();
-
-  doc.setTextColor(...NAVY);
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Summary', 20, y);
-  y += 8;
-
-  // Category totals
-  const totals: Record<string, { count: number; total: number }> = {};
-  for (const txn of transactions) {
-    if (!totals[txn.category]) totals[txn.category] = { count: 0, total: 0 };
-    totals[txn.category].count++;
-    totals[txn.category].total += txn.amount;
-  }
-
-  const entries = Object.entries(totals).sort((a, b) => a[1].total - b[1].total);
-  const colW = (w - 40) / 2;
-
-  for (let i = 0; i < entries.length; i++) {
-    const [cat, data] = entries[i];
-    const col = i % 2;
-    const row = Math.floor(i / 2);
-    const xBase = 20 + col * colW;
-    const yBase = y + row * 16;
-
-    // Small bar
-    const barWidth = Math.min(Math.abs(data.total) / 5, colW - 30);
-    doc.setFillColor(...LIGHT_GRAY);
-    doc.roundedRect(xBase, yBase, colW - 10, 12, 2, 2, 'F');
-    doc.setFillColor(...CYAN);
-    doc.roundedRect(xBase, yBase, Math.max(barWidth, 8), 12, 2, 2, 'F');
-
-    doc.setTextColor(...NAVY);
-    doc.setFontSize(7);
-    doc.setFont('helvetica', 'bold');
-    const label = cat.charAt(0).toUpperCase() + cat.slice(1);
-    doc.text(`${label} (${data.count})`, xBase + 3, yBase + 5);
-    doc.setTextColor(...DARK);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`${data.total.toFixed(2)} €`, xBase + 3, yBase + 10);
-  }
-
-  return y + Math.ceil(entries.length / 2) * 16 + 8;
+  const h = doc.internal.pageSize.getHeight();
+  doc.setTextColor(...GRAY);
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Página ${page} de ${total}`, w - 15, h - 17, { align: 'right' });
 }
 
 export function generateStatementPDF(
@@ -217,37 +290,51 @@ export function generateStatementPDF(
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageH = doc.internal.pageSize.getHeight();
 
-  drawHeader(doc, startDate, endDate);
+  // Sort transactions by date ascending for the statement
+  const sorted = [...transactions].sort((a, b) => a.date.getTime() - b.date.getTime());
 
-  let y = 55;
-  y = drawAccountInfo(doc, balance, y);
-  y = drawSummary(doc, transactions, y + 2);
+  // Calculate running balances
+  const totalChange = sorted.reduce((s, t) => s + t.amount, 0);
+  let runningBalance = balance - totalChange;
 
-  y += 4;
-  y = drawTableHeader(doc, y);
+  // Page 1
+  drawHeader(doc);
+  let y = 30;
+  y = drawOfficeAndAccountInfo(doc, balance, startDate, endDate, y);
+  y = drawMovementSummary(doc, sorted, balance, y);
 
-  for (let i = 0; i < transactions.length; i++) {
-    if (y > pageH - 30) {
+  // Transaction details section
+  y = drawSectionTitle(doc, 'Detalles de transacciones', y);
+  y = drawTransactionTableHeader(doc, y);
+
+  const pages: number[][] = [];
+  let currentPage: number[] = [];
+
+  for (let i = 0; i < sorted.length; i++) {
+    if (y > pageH - 25) {
+      pages.push([...currentPage]);
+      currentPage = [];
       drawFooter(doc);
       doc.addPage();
-      drawHeader(doc, startDate, endDate);
-      y = 52;
-      y = drawTableHeader(doc, y);
+      drawHeader(doc);
+      y = 30;
+      y = drawTransactionTableHeader(doc, y);
     }
-    y = drawTransactionRow(doc, transactions[i], y, i % 2 === 0);
+    currentPage.push(i);
+    runningBalance += sorted[i].amount;
+    y = drawTransactionRow(doc, sorted[i], i, y, runningBalance);
+  }
+  pages.push(currentPage);
+
+  // Draw footer on last page
+  drawFooter(doc);
+
+  // Add page numbers
+  const totalPages = doc.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    drawPageNumber(doc, p, totalPages);
   }
 
-  // Total row
-  const w = doc.internal.pageSize.getWidth();
-  const totalAmount = transactions.reduce((s, t) => s + t.amount, 0);
-  doc.setFillColor(...NAVY);
-  doc.rect(15, y, w - 30, 12, 'F');
-  doc.setTextColor(...WHITE);
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Total', 20, y + 8);
-  doc.text(`${totalAmount.toFixed(2)} €`, w - 20, y + 8, { align: 'right' });
-
-  drawFooter(doc);
-  doc.save(`BBVA_Statement_${format(startDate, 'yyyyMMdd')}_${format(endDate, 'yyyyMMdd')}.pdf`);
+  doc.save(`BBVA_Extracto_${format(startDate, 'yyyyMMdd')}_${format(endDate, 'yyyyMMdd')}.pdf`);
 }
