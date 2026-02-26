@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react';
-import { Lock, X, Pencil, ChevronLeft, ChevronRight, FileText, CreditCard, MoreHorizontal } from 'lucide-react';
+import { Lock, X, Pencil, ChevronLeft, ChevronRight, FileText, CreditCard, MoreHorizontal, Download } from 'lucide-react';
 import oceanBg from '@/assets/ocean-bg.jpg';
 import BottomNav, { TopBar } from '@/components/BottomNav';
 import { generateTransactions, type Transaction } from '@/lib/transactions';
 import { format } from 'date-fns';
+import { generateStatementPDF } from '@/lib/generate-statement-pdf';
 
 interface DashboardProps {
   onLogout: () => void;
@@ -261,6 +262,17 @@ const AccountDetail = ({
         <button className="flex flex-col items-center gap-1 text-primary">
           <MoreHorizontal size={24} />
           <span className="text-[10px] font-medium">More</span>
+        </button>
+      </div>
+
+      {/* Download statement */}
+      <div className="mx-4 mb-4">
+        <button
+          onClick={() => generateStatementPDF(transactions, balance, txnStartDate, txnEndDate)}
+          className="w-full py-3 rounded-xl bg-accent text-accent-foreground font-bold text-sm flex items-center justify-center gap-2"
+        >
+          <Download size={16} />
+          Download Statement (PDF)
         </button>
       </div>
 
