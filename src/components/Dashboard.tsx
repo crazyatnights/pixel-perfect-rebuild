@@ -12,8 +12,6 @@ interface DashboardProps {
 
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [view, setView] = useState<'home' | 'account'>('home');
-  const [tab, setTab] = useState<'featured' | 'products'>('featured');
-  const [showLoanBanner, setShowLoanBanner] = useState(true);
   const [txnStartDate, setTxnStartDate] = useState(() => {
     const d = new Date();
     d.setMonth(d.getMonth() - 1);
@@ -50,66 +48,76 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
   return (
     <div className="min-h-screen max-w-md mx-auto bg-background flex flex-col pb-20">
-      <TopBar title="Home" />
+      <TopBar />
 
-      {/* Tabs */}
-      <div className="px-4 mb-4">
-        <div className="flex gap-2">
-          <button
-            onClick={() => setTab('featured')}
-            className={`px-5 py-2 rounded-full text-sm font-bold transition-colors ${
-              tab === 'featured'
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-card text-foreground border border-border'
-            }`}
-          >
-            Featured
+      {/* Hero card with ocean background */}
+      <div className="mx-4 mb-4 rounded-2xl overflow-hidden relative">
+        <img src={oceanBg} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-primary/40" />
+        <div className="relative z-10 p-5">
+          <div className="flex items-start justify-between mb-3">
+            <h2 className="text-xl font-bold text-white leading-tight">
+              Ya estás en tu<br />app
+            </h2>
+            <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-bold text-xs">
+              MI
+            </div>
+          </div>
+          <button className="w-full py-3 rounded-full bg-card/90 backdrop-blur-sm text-foreground font-semibold text-sm text-center">
+            Ir a mi posición global
           </button>
-          <button
-            onClick={() => setTab('products')}
-            className={`px-5 py-2 rounded-full text-sm font-bold transition-colors ${
-              tab === 'products'
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-card text-foreground border border-border'
-            }`}
-          >
-            Your products
-          </button>
+          <div className="flex items-start gap-2 mt-3 text-xs text-white/80">
+            <Lock size={14} className="mt-0.5 shrink-0" />
+            <p>En BBVA nunca llamaremos para pedirte tus claves de acceso o códigos de SMS.</p>
+          </div>
         </div>
       </div>
 
-      {/* Loan banner */}
-      {showLoanBanner && (
-        <div className="mx-4 mb-6 rounded-2xl overflow-hidden bg-primary p-5 relative">
-          <button
-            onClick={() => setShowLoanBanner(false)}
-            className="absolute top-3 right-3 text-primary-foreground/70"
-          >
-            <X size={20} />
-          </button>
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-accent/30 flex items-center justify-center shrink-0">
-              <div className="w-10 h-10 rounded-full bg-accent" />
-            </div>
-            <div>
-              <h3 className="text-primary-foreground font-bold text-base">Do you need a loan?</h3>
-              <p className="text-primary-foreground/80 text-sm mt-1">
-                Find out if it is available for you with the new fast and paperless process.
-              </p>
-              <button className="text-accent font-bold text-sm mt-2">See more</button>
-            </div>
+      {/* Pagos rápidos */}
+      <div className="px-4 mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-lg font-bold text-foreground">Pagos rápidos</h3>
+          <Pencil size={18} className="text-primary" />
+        </div>
+        <p className="text-sm text-muted-foreground mb-3">Copia los datos de tu tarjeta para pagos online</p>
+
+        {/* Card carousel */}
+        <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-primary to-accent/60 p-5 relative" style={{ minHeight: 170 }}>
+          <div className="flex items-start justify-between mb-8">
+            <span className="text-white/90 font-bold text-sm tracking-wider">BBVA</span>
+            <span className="text-white/70 text-xs">Débito</span>
+          </div>
+          <div className="absolute bottom-12 left-5">
+            <span className="text-white font-mono text-sm">•0567</span>
+          </div>
+          <div className="absolute bottom-5 right-5">
+            <span className="text-white font-bold text-lg tracking-widest">VISA</span>
           </div>
         </div>
-      )}
+
+        <button className="flex items-center gap-2 mt-3 text-sm text-primary font-medium">
+          <span className="w-5 h-5 rounded-full border border-primary flex items-center justify-center text-xs">⊕</span>
+          Ver saldo, datos y CVV
+        </button>
+        <div className="flex items-center justify-between mt-3">
+          <span className="text-xs text-accent">1 de 3</span>
+          <div className="flex gap-2">
+            <button className="w-8 h-8 rounded-full border border-primary flex items-center justify-center text-primary">
+              <ChevronLeft size={16} />
+            </button>
+            <button className="w-8 h-8 rounded-full border border-primary flex items-center justify-center text-primary">
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      </div>
 
       {/* Main products */}
       <div className="px-4">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-foreground">Main products</h2>
-          <Pencil size={20} className="text-foreground" />
+          <h2 className="text-xl font-bold text-foreground">Productos principales</h2>
+          <Pencil size={18} className="text-primary" />
         </div>
-
-        {/* Account card */}
         <AccountCard balance={balance} transactions={transactions} onTap={() => setView('account')} />
       </div>
 
@@ -118,7 +126,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   );
 };
 
-/* ── Account summary card (reused in both tabs) ── */
+/* ── Account summary card ── */
 const AccountCard = ({ balance, transactions, onTap }: { balance: number; transactions: Transaction[]; onTap: () => void }) => (
   <div className="bbva-card p-5 cursor-pointer" onClick={onTap}>
     <div className="flex items-center justify-between mb-1">

@@ -1,4 +1,5 @@
 import { Home, Heart, PlusCircle, Mail, Users, ChevronLeft, HelpCircle, Menu, Eye } from 'lucide-react';
+import bbvaLogo from '@/assets/bbva-logo.png';
 
 interface BottomNavProps {
   active?: string;
@@ -63,21 +64,25 @@ export const TopBar = ({
       ) : (
         <button className="flex flex-col items-center text-primary">
           <Eye size={22} />
-          <span className="text-xs">Visible</span>
+          <span className="text-xs">Modo</span>
         </button>
       )}
     </div>
-    {title && <span className="text-primary font-bold text-lg">{title}</span>}
+    {title ? (
+      <span className="text-primary font-bold text-lg">{title}</span>
+    ) : (
+      <img src={bbvaLogo} alt="BBVA" className="h-5 brightness-0" style={{ filter: 'brightness(0) saturate(100%) invert(11%) sepia(62%) saturate(4808%) hue-rotate(215deg) brightness(92%) contrast(107%)' }} />
+    )}
     <div className="flex items-center gap-3">
-      <button className="flex flex-col items-center text-primary">
+      <button className="flex flex-col items-center text-accent">
         <HelpCircle size={28} strokeWidth={1.5} />
-        <span className="text-xs">Help</span>
+        <span className="text-xs">Blue</span>
       </button>
       <button className="flex flex-col items-center">
         <div className="w-9 h-9 rounded-full border-2 border-primary flex items-center justify-center">
           <Menu size={18} className="text-primary" />
         </div>
-        <span className="text-xs text-primary">Menu</span>
+        <span className="text-xs text-primary">Menú</span>
       </button>
     </div>
   </div>

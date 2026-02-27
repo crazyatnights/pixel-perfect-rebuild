@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Lock, HelpCircle, Menu, Eye as EyeIcon, X } from 'lucide-react';
 import oceanBg from '@/assets/ocean-bg.jpg';
+import bbvaLogo from '@/assets/bbva-logo.png';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -35,7 +36,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
       {/* Header */}
       <div className="relative z-10 flex items-center justify-between px-4 pt-4">
         <div />
-        <span className="text-white font-bold text-xl tracking-wider">BBVA</span>
+        <img src={bbvaLogo} alt="BBVA" className="h-6" />
         <div className="flex items-center gap-3">
           <button className="flex flex-col items-center text-white">
             <HelpCircle size={28} strokeWidth={1.5} />
