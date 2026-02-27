@@ -1,5 +1,6 @@
 import { ShoppingBag, ShoppingCart, Car, Home, Tv, ArrowLeftRight, Package, Fuel, Train, Smartphone, Wifi, Zap, Gamepad2, Music, CreditCard, Store } from 'lucide-react';
 import type { Transaction } from '@/lib/transactions';
+import bizumLogo from '@/assets/bizum.svg';
 
 /**
  * Brand color map: merchant name → { bg color, text color, short label }
@@ -49,9 +50,9 @@ const brandMap: Record<string, { bg: string; fg: string; label: string }> = {
   'PlayStation Store': { bg: '#003087', fg: '#fff', label: 'PS' },
 
   // Transfer / Bizum
-  'Bizum - Juan':    { bg: '#00b8c6', fg: '#fff', label: 'B' },
-  'Bizum - María':   { bg: '#00b8c6', fg: '#fff', label: 'B' },
-  'Bizum - Carlos':  { bg: '#00b8c6', fg: '#fff', label: 'B' },
+  'Bizum - Juan':    { bg: '#004481', fg: '#fff', label: 'bizum' },
+  'Bizum - María':   { bg: '#004481', fg: '#fff', label: 'bizum' },
+  'Bizum - Carlos':  { bg: '#004481', fg: '#fff', label: 'bizum' },
 
   // Subscriptions
   'iCloud Storage':  { bg: '#3693f5', fg: '#fff', label: '☁' },
@@ -77,10 +78,35 @@ interface TransactionIconProps {
 export const TransactionIcon = ({ txn, size = 40 }: TransactionIconProps) => {
   // Check for Bizum prefix
   const desc = txn.description;
-  const bizumMatch = desc.startsWith('Bizum') ? brandMap['Bizum - Juan'] : undefined;
+  const isBizum = desc.startsWith('Bizum');
+  const bizumMatch = isBizum ? brandMap['Bizum - Juan'] : undefined;
   const brand = brandMap[desc] || bizumMatch;
 
   if (brand) {
+    // Use Bizum SVG logo for any Bizum transaction
+    if (isBizum || brand.label === 'bizum') {
+      return (
+        <div
+          className="rounded-full flex items-center justify-center shrink-0"
+          style={{
+            width: size,
+            height: size,
+            backgroundColor: '#004481',
+          }}
+        >
+          <img
+            src={bizumLogo}
+            alt="Bizum"
+            style={{
+              width: size * 0.6,
+              height: size * 0.6,
+              filter: 'brightness(0) invert(1)',
+            }}
+          />
+        </div>
+      );
+    }
+
     return (
       <div
         className="rounded-full flex items-center justify-center font-bold shrink-0"
