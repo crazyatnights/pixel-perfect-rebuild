@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Lock, X, Pencil, ChevronLeft, ChevronRight, FileText, CreditCard, MoreHorizontal, Download } from 'lucide-react';
 import { TransactionIcon } from '@/components/TransactionIcon';
 import oceanBg from '@/assets/ocean-bg.jpg';
+import debitCard from '@/assets/debit.png';
 import BottomNav, { TopBar } from '@/components/BottomNav';
 import { generateTransactions, type Transaction } from '@/lib/transactions';
 import { format } from 'date-fns';
@@ -83,17 +84,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         <p className="text-sm text-muted-foreground mb-3">Copia los datos de tu tarjeta para pagos online</p>
 
         {/* Card carousel */}
-        <div className="rounded-2xl overflow-hidden bg-gradient-to-br from-primary to-accent/60 p-5 relative" style={{ minHeight: 170 }}>
-          <div className="flex items-start justify-between mb-8">
-            <span className="text-white/90 font-bold text-sm tracking-wider">BBVA</span>
-            <span className="text-white/70 text-xs">Débito</span>
-          </div>
-          <div className="absolute bottom-12 left-5">
-            <span className="text-white font-mono text-sm">•0567</span>
-          </div>
-          <div className="absolute bottom-5 right-5">
-            <span className="text-white font-bold text-lg tracking-widest">VISA</span>
-          </div>
+        <div className="rounded-2xl overflow-hidden">
+          <img src={debitCard} alt="Tarjeta de débito BBVA" className="w-full h-auto rounded-2xl" />
         </div>
 
         <button className="flex items-center gap-2 mt-3 text-sm text-primary font-medium">
