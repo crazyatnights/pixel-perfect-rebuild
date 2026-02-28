@@ -14,6 +14,7 @@ interface DashboardProps {
 
 const OWNER_NAME = 'MIGUEL IGNACIO';
 const ACCOUNT_SUFFIX = '7925';
+const CARD_NUMBER = '4658 8520 3179 7925';
 
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [view, setView] = useState<'home' | 'account'>('home');
@@ -92,7 +93,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         {/* Card carousel */}
         <div className="rounded-2xl overflow-hidden relative">
           <img src={debitCard} alt="Tarjeta de débito BBVA" className="w-full h-auto rounded-2xl" />
-          <span className="absolute bottom-4 left-5 text-white font-semibold text-xs tracking-wider drop-shadow-md">{OWNER_NAME}</span>
+          <span className="absolute bottom-[22%] left-5 text-white font-semibold text-sm tracking-[0.18em] drop-shadow-md" style={{ fontFamily: "'OCR A Std', 'Courier New', monospace" }}>{CARD_NUMBER}</span>
+          <span className="absolute bottom-[8%] left-5 text-white font-semibold text-[10px] tracking-[0.15em] uppercase drop-shadow-md">{OWNER_NAME}</span>
         </div>
 
         <button className="flex items-center gap-2 mt-3 text-sm text-primary font-medium">
