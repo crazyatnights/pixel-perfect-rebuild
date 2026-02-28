@@ -12,6 +12,9 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
+const OWNER_NAME = 'MIGUEL IGNACIO';
+const ACCOUNT_SUFFIX = '7925';
+
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [view, setView] = useState<'home' | 'account'>('home');
   const [txnStartDate, setTxnStartDate] = useState(() => {
@@ -28,7 +31,10 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     [txnStartDate, txnEndDate, txnCount]
   );
 
-  const balance = 12.17;
+  const balance = useMemo(() => {
+    const starting = 2500;
+    return Math.round((starting + transactions.reduce((sum, t) => sum + t.amount, 0)) * 100) / 100;
+  }, [transactions]);
 
   if (view === 'account') {
     return (
@@ -84,8 +90,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         <p className="text-sm text-muted-foreground mb-3">Copia los datos de tu tarjeta para pagos online</p>
 
         {/* Card carousel */}
-        <div className="rounded-2xl overflow-hidden">
+        <div className="rounded-2xl overflow-hidden relative">
           <img src={debitCard} alt="Tarjeta de débito BBVA" className="w-full h-auto rounded-2xl" />
+          <span className="absolute bottom-4 left-5 text-white font-semibold text-xs tracking-wider drop-shadow-md">{OWNER_NAME}</span>
         </div>
 
         <button className="flex items-center gap-2 mt-3 text-sm text-primary font-medium">
@@ -123,8 +130,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 const AccountCard = ({ balance, transactions, onTap }: { balance: number; transactions: Transaction[]; onTap: () => void }) => (
   <div className="bbva-card p-5 cursor-pointer" onClick={onTap}>
     <div className="flex items-center justify-between mb-1">
-      <h4 className="text-xl font-bold text-primary">Account *67</h4>
-      <span className="text-sm text-muted-foreground">•67</span>
+      <h4 className="text-xl font-bold text-primary">Account *{ACCOUNT_SUFFIX}</h4>
+      <span className="text-sm text-muted-foreground">•{ACCOUNT_SUFFIX}</span>
     </div>
     <p className="text-3xl font-light text-foreground mt-2">{balance.toFixed(2)} €</p>
     <p className="text-sm text-muted-foreground">Available balance</p>
@@ -198,13 +205,13 @@ const AccountDetail = ({
 
   return (
     <div className="min-h-screen max-w-md mx-auto bg-background pb-20">
-      <TopBar title="Account *67" showBack onBack={onBack} />
+      <TopBar title={`Account *${ACCOUNT_SUFFIX}`} showBack onBack={onBack} />
 
       {/* Balance card */}
       <div className="mx-4 bbva-card p-5 mb-4">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-xl font-bold text-primary">Account *67</h3>
-          <span className="text-sm text-muted-foreground">•67</span>
+          <h3 className="text-xl font-bold text-primary">Account *{ACCOUNT_SUFFIX}</h3>
+          <span className="text-sm text-muted-foreground">•{ACCOUNT_SUFFIX}</span>
         </div>
         <p className="text-3xl font-light text-foreground mt-2">{balance.toFixed(2)} €</p>
         <p className="text-sm text-muted-foreground">Available balance</p>
