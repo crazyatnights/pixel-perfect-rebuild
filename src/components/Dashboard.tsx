@@ -8,16 +8,11 @@ import BottomNav, { TopBar } from '@/components/BottomNav';
 import { generateTransactions, type Transaction } from '@/lib/transactions';
 import { format } from 'date-fns';
 import { generateStatementPDF } from '@/lib/generate-statement-pdf';
+import { ACCOUNT_CONFIG } from '@/lib/account-config';
 
 interface DashboardProps {
   onLogout: () => void;
 }
-
-const OWNER_NAME = 'MIGUEL IGNACIO';
-const ACCOUNT_SUFFIX = '7925';
-const CARD_NUMBER = '4658 8520 3179 7925';
-const CARD_EXPIRY = '12/28';
-const CARD_CVV = '***';
 
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [view, setView] = useState<'home' | 'account'>('home');
@@ -72,7 +67,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               Ya estás en tu<br />app
             </h2>
             <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-bold text-xs">
-              MI
+              {ACCOUNT_CONFIG.initials}
             </div>
           </div>
           <button className="w-full py-3 rounded-full bg-card/90 backdrop-blur-sm text-foreground font-semibold text-sm text-center">
@@ -104,7 +99,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15)',
             }}
           >
-            {CARD_NUMBER}
+            {ACCOUNT_CONFIG.cardNumber}
           </span>
           {/* Validity & Expiry */}
           <div className="absolute bottom-[18%] left-5 flex items-end gap-3">
@@ -123,7 +118,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15)',
               }}
             >
-              {CARD_EXPIRY}
+              {ACCOUNT_CONFIG.cardExpiry}
             </span>
             <div className="flex flex-col ml-2">
               <span
@@ -140,7 +135,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15)',
               }}
             >
-              {CARD_CVV}
+              {ACCOUNT_CONFIG.cardCvv}
             </span>
           </div>
           {/* Owner Name */}
@@ -150,7 +145,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15)',
             }}
           >
-            {OWNER_NAME}
+            {ACCOUNT_CONFIG.ownerName}
           </span>
         </div>
 
@@ -189,8 +184,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 const AccountCard = ({ balance, transactions, onTap }: { balance: number; transactions: Transaction[]; onTap: () => void }) => (
   <div className="bbva-card p-5 cursor-pointer" onClick={onTap}>
     <div className="flex items-center justify-between mb-1">
-      <h4 className="text-xl font-bold text-primary">Account *{ACCOUNT_SUFFIX}</h4>
-      <span className="text-sm text-muted-foreground">•{ACCOUNT_SUFFIX}</span>
+      <h4 className="text-xl font-bold text-primary">Account *{ACCOUNT_CONFIG.accountSuffix}</h4>
+      <span className="text-sm text-muted-foreground">•{ACCOUNT_CONFIG.accountSuffix}</span>
     </div>
     <p className="text-3xl font-light text-foreground mt-2">{balance.toFixed(2)} €</p>
     <p className="text-sm text-muted-foreground">Available balance</p>
@@ -264,13 +259,13 @@ const AccountDetail = ({
 
   return (
     <div className="min-h-screen max-w-md mx-auto bg-background pb-20">
-      <TopBar title={`Account *${ACCOUNT_SUFFIX}`} showBack onBack={onBack} />
+      <TopBar title={`Account *${ACCOUNT_CONFIG.accountSuffix}`} showBack onBack={onBack} />
 
       {/* Balance card */}
       <div className="mx-4 bbva-card p-5 mb-4">
         <div className="flex items-center justify-between mb-1">
-          <h3 className="text-xl font-bold text-primary">Account *{ACCOUNT_SUFFIX}</h3>
-          <span className="text-sm text-muted-foreground">•{ACCOUNT_SUFFIX}</span>
+          <h3 className="text-xl font-bold text-primary">Account *{ACCOUNT_CONFIG.accountSuffix}</h3>
+          <span className="text-sm text-muted-foreground">•{ACCOUNT_CONFIG.accountSuffix}</span>
         </div>
         <p className="text-3xl font-light text-foreground mt-2">{balance.toFixed(2)} €</p>
         <p className="text-sm text-muted-foreground">Available balance</p>

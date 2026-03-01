@@ -1,6 +1,7 @@
 import jsPDF from 'jspdf';
 import { format } from 'date-fns';
 import type { Transaction } from './transactions';
+import { ACCOUNT_CONFIG } from './account-config';
 
 // BBVA brand colors (RGB)
 const NAVY = [18, 32, 63] as const;
@@ -27,9 +28,9 @@ function drawHeader(doc: jsPDF) {
   doc.setTextColor(...DARK);
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text('BBVA ACCOUNT HOLDER', 15, 16);
-  doc.text('CUSTOMER@EMAIL.COM', 15, 20);
-  doc.text('MADRID - SPAIN', 15, 24);
+  doc.text(ACCOUNT_CONFIG.ownerName, 15, 16);
+  doc.text(ACCOUNT_CONFIG.email, 15, 20);
+  doc.text(ACCOUNT_CONFIG.address, 15, 24);
 
   // BBVA logo (right)
   doc.setTextColor(...NAVY);
@@ -81,15 +82,15 @@ function drawOfficeAndAccountInfo(doc: jsPDF, balance: number, startDate: Date, 
 
   // Office info section
   y = drawSectionTitle(doc, 'Información de la oficina', y);
-  drawInfoRow(doc, 'DIRECCIÓN:', 'C/ Gran Vía 1, Madrid', 18, y);
+  drawInfoRow(doc, 'DIRECCIÓN:', ACCOUNT_CONFIG.branchAddress, 18, y);
   y += 5;
-  drawInfoRow(doc, 'TELÉFONO:', '00 34 912 345 678', 18, y);
+  drawInfoRow(doc, 'TELÉFONO:', ACCOUNT_CONFIG.branchPhone, 18, y);
   y += 9;
 
   // Account info section
   y = drawSectionTitle(doc, 'Información de la cuenta', y);
   const halfW = (w - 30) / 2;
-  drawInfoRow(doc, 'Número de cuenta:', 'ES12 0182 **** **** 0067', 18, y, 35);
+  drawInfoRow(doc, 'Número de cuenta:', ACCOUNT_CONFIG.iban, 18, y, 35);
   drawInfoRow(doc, 'Fecha de corte:', format(endDate, 'dd-MM-yyyy'), 18 + halfW, y, 30);
   y += 5;
   drawInfoRow(doc, 'Saldo disponible:', `${balance.toFixed(2)} €`, 18, y, 35);
