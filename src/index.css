@@ -62,6 +62,25 @@
   }
 }
 
+/* Hide scrollbar for mobile app feel */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (max-width: 768px) {
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 @layer utilities {
   .bbva-gradient {
     background: linear-gradient(135deg, hsl(221 69% 15%) 0%, hsl(221 100% 35%) 100%);
