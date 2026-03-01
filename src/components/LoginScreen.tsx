@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Lock, HelpCircle, Menu, Eye as EyeIcon, X } from 'lucide-react';
 import oceanBg from '@/assets/ocean-bg.jpg';
 import bbvaLogo from '@/assets/bbva-logo.png';
+import { ACCOUNT_CONFIG } from '@/lib/account-config';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -59,14 +60,14 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
               <h1 className={`text-3xl font-bold leading-tight ${showPasswordSheet ? 'text-white/80' : 'text-primary'}`}>
                 {greeting()},
                 <br />
-                Juan Pedro
+                {ACCOUNT_CONFIG.loginDisplayName}
               </h1>
               <button className={`mt-2 text-sm font-semibold ${showPasswordSheet ? 'text-white/60' : 'text-accent'}`}>
                 Change user
               </button>
             </div>
             <div className="w-12 h-12 rounded-full bg-bbva-cyan flex items-center justify-center text-primary font-bold text-sm">
-              JP
+              {ACCOUNT_CONFIG.loginInitials}
             </div>
           </div>
 
