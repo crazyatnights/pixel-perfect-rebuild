@@ -3,6 +3,7 @@ import { Lock, X, Pencil, ChevronLeft, ChevronRight, FileText, CreditCard, MoreH
 import { TransactionIcon } from '@/components/TransactionIcon';
 import oceanBg from '@/assets/ocean-bg.jpg';
 import debitCard from '@/assets/debit.png';
+import bizumLogo from '@/assets/bizum.png';
 import BottomNav, { TopBar } from '@/components/BottomNav';
 import { generateTransactions, type Transaction } from '@/lib/transactions';
 import { format } from 'date-fns';
@@ -273,7 +274,7 @@ const AccountDetail = ({
           <span className="text-[10px] font-medium">Cards</span>
         </button>
         <button className="flex flex-col items-center gap-1 text-primary">
-          <span className="text-xl">💸</span>
+          <img src={bizumLogo} alt="Bizum" className="w-6 h-6 object-contain" />
           <span className="text-[10px] font-medium text-primary">Bizum</span>
         </button>
         <button className="flex flex-col items-center gap-1 text-primary">
