@@ -16,6 +16,8 @@ interface DashboardProps {
 const OWNER_NAME = 'MIGUEL IGNACIO';
 const ACCOUNT_SUFFIX = '7925';
 const CARD_NUMBER = '4658 8520 3179 7925';
+const CARD_EXPIRY = '12/28';
+const CARD_CVV = '***';
 
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [view, setView] = useState<'home' | 'account'>('home');
@@ -92,10 +94,64 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         <p className="text-sm text-muted-foreground mb-3">Copia los datos de tu tarjeta para pagos online</p>
 
         {/* Card carousel */}
-        <div className="rounded-2xl overflow-hidden relative">
+        <div className="rounded-2xl overflow-hidden relative shadow-lg">
           <img src={debitCard} alt="Tarjeta de débito BBVA" className="w-full h-auto rounded-2xl" />
-          <span className="absolute bottom-[22%] left-5 text-white font-semibold text-sm tracking-[0.18em] drop-shadow-md" style={{ fontFamily: "'OCR A Std', 'Courier New', monospace" }}>{CARD_NUMBER}</span>
-          <span className="absolute bottom-[8%] left-5 text-white font-semibold text-[10px] tracking-[0.15em] uppercase drop-shadow-md">{OWNER_NAME}</span>
+          {/* Card Number */}
+          <span
+            className="absolute bottom-[30%] left-5 text-white font-bold text-base tracking-[0.22em]"
+            style={{
+              fontFamily: "'OCR A Std', 'Courier New', monospace",
+              textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15)',
+            }}
+          >
+            {CARD_NUMBER}
+          </span>
+          {/* Validity & Expiry */}
+          <div className="absolute bottom-[18%] left-5 flex items-end gap-3">
+            <div className="flex flex-col">
+              <span
+                className="text-white/70 uppercase text-[6px] tracking-[0.1em] leading-tight"
+                style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
+              >
+                Válida<br />hasta
+              </span>
+            </div>
+            <span
+              className="text-white font-bold text-sm tracking-[0.15em]"
+              style={{
+                fontFamily: "'OCR A Std', 'Courier New', monospace",
+                textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15)',
+              }}
+            >
+              {CARD_EXPIRY}
+            </span>
+            <div className="flex flex-col ml-2">
+              <span
+                className="text-white/70 uppercase text-[6px] tracking-[0.1em] leading-tight"
+                style={{ textShadow: '0 1px 2px rgba(0,0,0,0.4)' }}
+              >
+                CVV
+              </span>
+            </div>
+            <span
+              className="text-white font-bold text-sm tracking-[0.15em]"
+              style={{
+                fontFamily: "'OCR A Std', 'Courier New', monospace",
+                textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15)',
+              }}
+            >
+              {CARD_CVV}
+            </span>
+          </div>
+          {/* Owner Name */}
+          <span
+            className="absolute bottom-[7%] left-5 text-white font-bold text-xs tracking-[0.18em] uppercase"
+            style={{
+              textShadow: '0 2px 4px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.15)',
+            }}
+          >
+            {OWNER_NAME}
+          </span>
         </div>
 
         <button className="flex items-center gap-2 mt-3 text-sm text-primary font-medium">
