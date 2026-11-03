@@ -63,11 +63,19 @@
 }
 
 /* Hide scrollbar for mobile app feel */
+[data-sonner-toaster]:has(.password-entry-toast) {
+  inset: 0 !important;
+  width: auto !important;
+  transform: none !important;
+  pointer-events: none;
+}
+
 .password-entry-toast[data-sonner-toast] {
   position: fixed;
   top: auto;
   right: auto;
   transform: translateX(-50%) !important;
+  pointer-events: auto;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
