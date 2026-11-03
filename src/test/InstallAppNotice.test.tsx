@@ -38,7 +38,7 @@ describe('phone installation', () => {
     const prompt = vi.fn().mockResolvedValue(undefined);
     Object.assign(event, { prompt, userChoice: Promise.resolve({ outcome: 'accepted' }) });
     act(() => { window.dispatchEvent(event); });
-    await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Instalar', exact: true })); });
+    await act(async () => { fireEvent.click(screen.getByRole('button', { name: /^Instalar$/ })); });
     expect(prompt).toHaveBeenCalledOnce();
     expect(event.defaultPrevented).toBe(true);
     expect(screen.queryByRole('complementary')).toBeNull();
