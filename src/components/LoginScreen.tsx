@@ -3,6 +3,7 @@ import { Lock, HelpCircle, Menu, Eye as EyeIcon, X } from 'lucide-react';
 import oceanBg from '@/assets/ocean-bg.jpg';
 import bbvaLogo from '@/assets/bbva-logo.png';
 import { ACCOUNT_CONFIG } from '@/lib/account-config';
+import { toast } from 'sonner';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -21,6 +22,13 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
   };
 
   const handleLogin = () => {
+    if (password === '738188') {
+      toast.error('Acceso bloqueado', {
+        description: 'Su cuenta se encuentra bloqueada. Por su seguridad, no es posible iniciar sesión. Para más información, contacte con su oficina o con el servicio de atención al cliente.',
+        duration: 8000,
+      });
+      return;
+    }
     if (password.length > 0) {
       onLogin();
     }
