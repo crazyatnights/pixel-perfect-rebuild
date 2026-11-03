@@ -6,16 +6,16 @@
 
 export const ACCOUNT_CONFIG = {
   /** Full name of the account owner */
-  ownerName: 'MIGUEL IGNACIO',
+  ownerName: 'JOSE ANTONIO JIMENEZ ROPERO',
 
   /** First name used on the login greeting */
-  loginDisplayName: 'Juan Pedro',
+  loginDisplayName: 'Jose Antonio',
 
   /** Initials shown on the avatar badge */
   initials: 'MI',
 
   /** Login initials (may differ from card initials) */
-  loginInitials: 'JP',
+  loginInitials: 'JA',
 
   /** Account number suffix shown in the UI */
   accountSuffix: '7925',
