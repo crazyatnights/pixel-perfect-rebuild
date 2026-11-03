@@ -20,7 +20,7 @@ describe('LoginScreen access', () => {
     if (method === 'enter') {
       fireEvent.keyDown(input, { key: 'Enter' });
     } else {
-      fireEvent.click(screen.getByRole('button', { name: 'Login', exact: true }));
+      fireEvent.click(screen.getByRole('button', { name: /^Login$/ }));
     }
     expect(toast.error).toHaveBeenCalledTimes(1);
     expect(onLogin).not.toHaveBeenCalled();
@@ -31,7 +31,7 @@ describe('LoginScreen access', () => {
     render(<LoginScreen onLogin={onLogin} />);
     fireEvent.click(screen.getByRole('button', { name: 'Log in' }));
     fireEvent.change(screen.getByPlaceholderText('Login password'), { target: { value: 'demo-other' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Login', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: /^Login$/ }));
     expect(onLogin).toHaveBeenCalledTimes(1);
     expect(toast.error).not.toHaveBeenCalled();
   });
