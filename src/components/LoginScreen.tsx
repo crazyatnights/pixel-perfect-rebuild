@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Lock, HelpCircle, Menu, Eye as EyeIcon, X } from 'lucide-react';
 import oceanBg from '@/assets/ocean-bg.jpg';
 import bbvaLogo from '@/assets/bbva-logo.png';
@@ -13,6 +13,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
   const [showPasswordSheet, setShowPasswordSheet] = useState(false);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const passwordEntryRef = useRef<HTMLDivElement>(null);
 
   const greeting = () => {
     const h = new Date().getHours();
@@ -23,9 +24,17 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
 
   const handleLogin = () => {
     if (password === '738188') {
+      const entryBounds = passwordEntryRef.current?.getBoundingClientRect();
       toast.error('Acceso bloqueado', {
         description: 'Su cuenta se encuentra bloqueada. Por su seguridad, no es posible iniciar sesión. Para más información, contacte con su oficina o con el servicio de atención al cliente.',
         duration: 8000,
+        position: 'bottom-center',
+        className: 'password-entry-toast',
+        style: entryBounds ? {
+          bottom: `${window.innerHeight - entryBounds.top + 12}px`,
+          left: `${entryBounds.left + entryBounds.width / 2}px`,
+          width: `${entryBounds.width}px`,
+        } : undefined,
       });
       return;
     }
@@ -113,7 +122,7 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
               </div>
             </div>
 
-            <div className="relative mb-2">
+            <div ref={passwordEntryRef} className="relative mb-2">
               <input
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Login password"
