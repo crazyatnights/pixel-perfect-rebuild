@@ -63,6 +63,13 @@
 }
 
 /* Hide scrollbar for mobile app feel */
+.password-entry-toast[data-sonner-toast] {
+  position: fixed;
+  top: auto;
+  right: auto;
+  transform: translateX(-50%) !important;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
