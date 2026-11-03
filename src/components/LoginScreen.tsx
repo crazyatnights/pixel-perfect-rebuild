@@ -17,9 +17,9 @@ const LoginScreen = ({ onLogin }: LoginScreenProps) => {
 
   const greeting = () => {
     const h = new Date().getHours();
-    if (h < 12) return 'Good morning';
-    if (h < 18) return 'Good afternoon';
-    return 'Good evening';
+    if (h < 12) return 'Buenos Dias';
+    if (h < 18) return 'Buenas Tardes';
+    return 'Buenas Tardes';
   };
 
   const handleLogin = () => {
