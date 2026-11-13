@@ -6,10 +6,10 @@
 
 export const ACCOUNT_CONFIG = {
   /** Full name of the account owner */
-  ownerName: 'JOSE ANTONIO JIMENEZ ROPERO',
+  ownerName: 'HUGO ARMANDO CASTANEDA DIAZ',
 
   /** First name used on the login greeting */
-  loginDisplayName: 'Jose Antonio',
+  loginDisplayName: 'Hugo Armando',
 
   /** Initials shown on the avatar badge */
   initials: 'MI',
